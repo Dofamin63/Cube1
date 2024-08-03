@@ -2,12 +2,12 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Move : MonoBehaviour
+public class Rotation : MonoBehaviour
 {
     [SerializeField] private float _speed;
-    
+
     void Update()
     {
-        transform.position += transform.forward * (_speed * Time.deltaTime);
+        transform.Rotate(Vector3.up, _speed * Time.deltaTime);
     }
 }
