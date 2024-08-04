@@ -10,7 +10,7 @@ public class CounterController : MonoBehaviour
 
     public TextMeshPro counterText;
 
-    void Update()
+    private void Update()
     {
         if (Input.GetMouseButtonDown(0))
         {
@@ -27,7 +27,7 @@ public class CounterController : MonoBehaviour
         }
     }
 
-    IEnumerator CountCoroutine()
+    private IEnumerator CountCoroutine()
     {
         while (enabled)
         {
