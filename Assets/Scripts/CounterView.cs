@@ -15,7 +15,7 @@ public class CounterView : MonoBehaviour
     private String _nameCounter = "Counter: ";
     private WaitForSeconds _wait; 
 
-    void Start()
+    private void Start()
     {
        _counterText = transform.GetComponent<TextMeshPro>();
        _counterText.text = _nameCounter + _counter;
