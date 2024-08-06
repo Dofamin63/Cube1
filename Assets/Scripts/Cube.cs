@@ -2,6 +2,8 @@ using System;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
+[RequireComponent(typeof(Renderer))]
+[RequireComponent(typeof(Rigidbody))]
 public class Cube : MonoBehaviour
 {
     [SerializeField] private int _minQuantityCube;
