@@ -148,6 +148,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   _minQuantityCube: 2
   _maxQuantityCube: 7
-  _minScale: 0.3
-  _explosionForce: 5
-  _explosionRadius: 5
+  _minScale: 0.2
