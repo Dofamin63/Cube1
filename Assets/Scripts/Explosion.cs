@@ -11,6 +11,11 @@ public class Explosion : MonoBehaviour
     {
         _spawnerCube.SpawnCub += ExplosionCubes;
     }
+    
+    private void OnDisable()
+    {
+        _spawnerCube.SpawnCub += ExplosionCubes;
+    }
 
     private void ExplosionCubes(List<Rigidbody> rigidbodies, Vector3 position)
     {

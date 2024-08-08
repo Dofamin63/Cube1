@@ -14,25 +14,10 @@ public class Cube : MonoBehaviour
     private float _splitChance = 1f;
     private int _divider = 2;
 
-    public Action<Vector3, int> SplitCube;
+    public static Action<Vector3, int> SplitCube;
     
     public Rigidbody Rigidbody { get; private set;  }
 
-    public void SplitChance()
-    {
-        _splitChance /= _divider;
-    }
-
-    public void ReduceScale()
-    {
-        transform.localScale /= _divider;
-    }
-
-    public void SetColor()
-    {
-        _renderer.material.color = new Color(Random.value, Random.value, Random.value);
-    }
-    
     private void Awake()
     {
         _renderer = GetComponent<Renderer>();
@@ -53,5 +38,12 @@ public class Cube : MonoBehaviour
         }
 
         Destroy(gameObject);
+    }
+    
+    public void Init()
+    {
+        _splitChance /= _divider;
+        transform.localScale /= _divider;
+        _renderer.material.color = new Color(Random.value, Random.value, Random.value);
     }
 }
