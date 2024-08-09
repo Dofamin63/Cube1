@@ -6,32 +6,38 @@ using Random = UnityEngine.Random;
 public class SpawnerCube : MonoBehaviour
 {
     [SerializeField] private Cube _prefab;
-   
-    private List<Cube> _cubes;
+    [SerializeField] private List<Cube> _cubes;
 
-    public Action<List<Rigidbody>, Vector3> SpawnCub;
+    private List<Cube> _newCubes;
+    
+    public event Action<List<Cube>, Vector3> SpawnCub;
+
+    public List<Cube> Cubes => new (_newCubes);
 
     private void OnEnable()
     {
-        Cube.SplitCube += SpawnCube;
+        _cubes.ForEach(cube => cube.SplittingCube += SpawnCube);
     }
     
     private void OnDisable()
     {
-        Cube.SplitCube += SpawnCube;
+        _cubes.ForEach(cube => cube.SplittingCube -= SpawnCube);
+        _newCubes.ForEach(cube => cube.SplittingCube -= SpawnCube);
     }
 
-    private void SpawnCube(Vector3 position, int countCube)
+    private void SpawnCube(Transform transform, int countCube, float splitChance)
     {
-        List<Rigidbody> rigidbodies = new List<Rigidbody>();
-        
+        List<Cube> tempCubes = new List<Cube>(); 
+            
         for (int i = 0; i < countCube; i++)
         {
-            Cube newCube = Instantiate(_prefab, position, Random.rotation);
-            newCube.Init();
-            rigidbodies.Add(newCube.Rigidbody);
+            Cube newCube = Instantiate(_prefab, transform.position, Random.rotation);
+            newCube.Init(transform, splitChance);
+            newCube.SplittingCube += SpawnCube;
+            tempCubes.Add(newCube);
         }
-        
-        SpawnCub?.Invoke(rigidbodies, position);
+
+        _newCubes = tempCubes;
+        SpawnCub?.Invoke(Cubes, transform.position);
     }
 }

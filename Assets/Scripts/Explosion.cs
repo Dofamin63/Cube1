@@ -14,14 +14,14 @@ public class Explosion : MonoBehaviour
     
     private void OnDisable()
     {
-        _spawnerCube.SpawnCub += ExplosionCubes;
+        _spawnerCube.SpawnCub -= ExplosionCubes;
     }
 
-    private void ExplosionCubes(List<Rigidbody> rigidbodies, Vector3 position)
+    private void ExplosionCubes(List<Cube> cubes, Vector3 position)
     {
-        foreach (Rigidbody rigidbody in rigidbodies)
+        foreach (Cube cube in cubes)
         {
-            rigidbody.AddExplosionForce(_explosionForce, position, _explosionRadius);
+            cube.Rigidbody?.AddExplosionForce(_explosionForce, position, _explosionRadius);
         }
     }
 }

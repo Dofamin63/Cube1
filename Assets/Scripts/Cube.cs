@@ -11,12 +11,12 @@ public class Cube : MonoBehaviour
     [SerializeField] private float _minScale;
 
     private Renderer _renderer;
-    private float _splitChance = 1f;
     private int _divider = 2;
 
-    public static Action<Vector3, int> SplitCube;
+    public event Action<Transform, int, float> SplittingCube;
     
-    public Rigidbody Rigidbody { get; private set;  }
+    public Rigidbody Rigidbody { get; private set; }
+    public float SplitChance { get; private set; } = 1f; 
 
     private void Awake()
     {
@@ -28,22 +28,22 @@ public class Cube : MonoBehaviour
     {
         if (transform.localScale.x > _minScale)
         {
-            if (Random.value <= _splitChance)
+            if (Random.value <= SplitChance)
             {
-                _splitChance /= _divider;
+                SplitChance /= _divider;
                 int countCube = Random.Range(_minQuantityCube, _maxQuantityCube);
                 
-                SplitCube?.Invoke(transform.position, countCube);
+                SplittingCube?.Invoke(transform, countCube, SplitChance);
             }
         }
 
         Destroy(gameObject);
     }
     
-    public void Init()
+    public void Init(Transform transformParent, float splitChanceParent)
     {
-        _splitChance /= _divider;
-        transform.localScale /= _divider;
+        SplitChance = splitChanceParent / _divider;
+        transform.localScale = transformParent.localScale / _divider;
         _renderer.material.color = new Color(Random.value, Random.value, Random.value);
     }
 }
