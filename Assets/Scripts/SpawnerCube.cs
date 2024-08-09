@@ -7,37 +7,35 @@ public class SpawnerCube : MonoBehaviour
 {
     [SerializeField] private Cube _prefab;
     [SerializeField] private List<Cube> _cubes;
+    [SerializeField] private int _minQuantityCube;
+    [SerializeField] private int _maxQuantityCube;
 
-    private List<Cube> _newCubes;
-    
-    public event Action<List<Cube>, Vector3> SpawnCub;
+    public event Action<List<Cube>, Vector3> SpawnedCubes;
 
-    public List<Cube> Cubes => new (_newCubes);
+    public List<Cube> Cubes => new (_cubes.RemoveAll(cube => cube == null));
 
     private void OnEnable()
     {
-        _cubes.ForEach(cube => cube.SplittingCube += SpawnCube);
+        _cubes.ForEach(cube => cube.Splitting += Spawn);
     }
     
     private void OnDisable()
     {
-        _cubes.ForEach(cube => cube.SplittingCube -= SpawnCube);
-        _newCubes.ForEach(cube => cube.SplittingCube -= SpawnCube);
+        _cubes.ForEach(cube => cube.Splitting -= Spawn);
     }
 
-    private void SpawnCube(Transform transform, int countCube, float splitChance)
+    private void Spawn(Transform transform, float splitChance)
     {
-        List<Cube> tempCubes = new List<Cube>(); 
+        int countCube = Random.Range(_minQuantityCube, _maxQuantityCube);
             
         for (int i = 0; i < countCube; i++)
         {
             Cube newCube = Instantiate(_prefab, transform.position, Random.rotation);
             newCube.Init(transform, splitChance);
-            newCube.SplittingCube += SpawnCube;
-            tempCubes.Add(newCube);
+            newCube.Splitting += Spawn;
+            _cubes.Add(newCube);
         }
 
-        _newCubes = tempCubes;
-        SpawnCub?.Invoke(Cubes, transform.position);
+        SpawnedCubes?.Invoke(Cubes, transform.position);
     }
 }

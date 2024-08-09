@@ -146,6 +146,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: efeece6485c973c40960944138ba1060, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _minQuantityCube: 2
-  _maxQuantityCube: 7
+  _minQuantity: 2
+  _maxQuantity: 5
   _minScale: 0.2

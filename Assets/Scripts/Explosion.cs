@@ -9,12 +9,12 @@ public class Explosion : MonoBehaviour
 
     private void OnEnable()
     {
-        _spawnerCube.SpawnCub += ExplosionCubes;
+        _spawnerCube.SpawnedCubes += ExplosionCubes;
     }
     
     private void OnDisable()
     {
-        _spawnerCube.SpawnCub -= ExplosionCubes;
+        _spawnerCube.SpawnedCubes -= ExplosionCubes;
     }
 
     private void ExplosionCubes(List<Cube> cubes, Vector3 position)
