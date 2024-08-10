@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
@@ -10,9 +11,9 @@ public class SpawnerCube : MonoBehaviour
     [SerializeField] private int _minQuantityCube;
     [SerializeField] private int _maxQuantityCube;
 
-    public event Action<List<Cube>, Vector3> SpawnedCubes;
+    public event Action<Transform> SpawnedCubes;
 
-    public List<Cube> Cubes => new (_cubes.RemoveAll(cube => cube == null));
+    public List<Cube> Cubes => new (_cubes.Where(cube => cube != null).ToList());
 
     private void OnEnable()
     {
@@ -36,6 +37,6 @@ public class SpawnerCube : MonoBehaviour
             _cubes.Add(newCube);
         }
 
-        SpawnedCubes?.Invoke(Cubes, transform.position);
+        SpawnedCubes?.Invoke(transform);
     }
 }

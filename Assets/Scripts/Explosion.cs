@@ -15,13 +15,35 @@ public class Explosion : MonoBehaviour
     private void OnDisable()
     {
         _spawnerCube.SpawnedCubes -= ExplosionCubes;
+        _spawnerCube.Cubes.ForEach(cube => cube.Destroyed -= ExplosionCubes);
     }
 
-    private void ExplosionCubes(List<Cube> cubes, Vector3 position)
+    private void ExplosionCubes(Transform transformTarget)
     {
-        foreach (Cube cube in cubes)
+        _spawnerCube.Cubes.ForEach(cube => cube.Destroyed += ExplosionCubes);
+        
+        float explosionRadiusByScale = _explosionForce / transformTarget.localScale.x;
+        float explosionForceByScale = _explosionRadius / transformTarget.localScale.x;
+
+        foreach (Rigidbody hit in GetExplodableObjects(transformTarget))
         {
-            cube.Rigidbody?.AddExplosionForce(_explosionForce, position, _explosionRadius);
+            hit.AddExplosionForce(explosionForceByScale, transformTarget.position, explosionRadiusByScale);
         }
+    }
+
+    private List<Rigidbody> GetExplodableObjects(Transform transformTarget)
+    {
+        Collider[] hits = Physics.OverlapSphere(transformTarget.position, _explosionRadius);
+        List<Rigidbody> rigidbodies = new();
+
+        foreach (Collider hit in hits)
+        {
+            if (hit.attachedRigidbody != null)
+            {
+                rigidbodies.Add(hit.attachedRigidbody);
+            }
+        }
+
+        return rigidbodies;
     }
 }

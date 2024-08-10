@@ -6,20 +6,17 @@ using Random = UnityEngine.Random;
 [RequireComponent(typeof(Rigidbody))]
 public class Cube : MonoBehaviour
 {
-    [SerializeField] private float _minScale;
-
     private Renderer _renderer;
     private int _divider = 2;
 
     public event Action<Transform, float> Splitting;
+    public event Action<Transform> Destroyed;
 
-    public Rigidbody Rigidbody { get; private set; }
     public float SplitChance { get; private set; } = 1f;
 
     private void Awake()
     {
         _renderer = GetComponent<Renderer>();
-        Rigidbody = GetComponent<Rigidbody>();
     }
 
     private void OnMouseUpAsButton()
@@ -27,6 +24,10 @@ public class Cube : MonoBehaviour
         if (Random.value <= SplitChance)
         {
             Splitting?.Invoke(transform, SplitChance);
+        }
+        else
+        {
+            Destroyed?.Invoke(transform);
         }
 
         Destroy(gameObject);

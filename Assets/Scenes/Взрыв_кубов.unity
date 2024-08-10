@@ -765,7 +765,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _explosionForce: 5
-  _explosionRadius: 5
+  _explosionRadius: 10
   _spawnerCube: {fileID: 2084283366}
 --- !u!4 &1596608931
 Transform:
@@ -1194,6 +1194,8 @@ MonoBehaviour:
   - {fileID: 1329177927}
   - {fileID: 1759742745}
   - {fileID: 1874541347}
+  _minQuantityCube: 2
+  _maxQuantityCube: 7
 --- !u!4 &2084283367
 Transform:
   m_ObjectHideFlags: 0
