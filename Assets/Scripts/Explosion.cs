@@ -1,49 +1,49 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
 public class Explosion : MonoBehaviour
-{
-    [SerializeField] private float _explosionForce;
-    [SerializeField] private float _explosionRadius;
+{ 
     [SerializeField] private SpawnerCube _spawnerCube;
+    
+    private const float _explosionForce = 50f;
+    private const float _explosionRadius = 80;
 
     private void OnEnable()
     {
-        _spawnerCube.SpawnedCubes += ExplosionCubes;
+        _spawnerCube.Cubes.ForEach(cube => cube.Destroyed += GetExplodableObjects);
     }
-    
+
     private void OnDisable()
     {
-        _spawnerCube.SpawnedCubes -= ExplosionCubes;
-        _spawnerCube.Cubes.ForEach(cube => cube.Destroyed -= ExplosionCubes);
+        _spawnerCube.Cubes.ForEach(cube => cube.Destroyed -= GetExplodableObjects);
     }
 
-    private void ExplosionCubes(Transform transformTarget)
+    public void ExplosionCubes(List<Cube> cubes, Transform transformTarget, float explosionForce = _explosionForce, float explosionRadius = _explosionRadius)
     {
-        _spawnerCube.Cubes.ForEach(cube => cube.Destroyed += ExplosionCubes);
-        
-        float explosionRadiusByScale = _explosionForce / transformTarget.localScale.x;
-        float explosionForceByScale = _explosionRadius / transformTarget.localScale.x;
-
-        foreach (Rigidbody hit in GetExplodableObjects(transformTarget))
+        foreach (Cube cube in cubes)
         {
-            hit.AddExplosionForce(explosionForceByScale, transformTarget.position, explosionRadiusByScale);
+            cube?.Rigidbody.AddExplosionForce(explosionForce, transformTarget.position, explosionRadius);
+            cube.Destroyed += GetExplodableObjects;
         }
     }
 
-    private List<Rigidbody> GetExplodableObjects(Transform transformTarget)
+    private void GetExplodableObjects(Transform transformTarget)
     {
+        float explosionRadiusByScale = _explosionForce / transformTarget.localScale.x;
+        float explosionForceByScale = _explosionRadius / transformTarget.localScale.x;
+        
         Collider[] hits = Physics.OverlapSphere(transformTarget.position, _explosionRadius);
-        List<Rigidbody> rigidbodies = new();
+        List<Cube> cubes = new();
 
         foreach (Collider hit in hits)
         {
-            if (hit.attachedRigidbody != null)
+            if (hit.TryGetComponent(out Cube cube))
             {
-                rigidbodies.Add(hit.attachedRigidbody);
+                cubes.Add(cube);
             }
         }
-
-        return rigidbodies;
+        
+        ExplosionCubes(cubes, transformTarget, explosionRadiusByScale, explosionForceByScale);
     }
 }

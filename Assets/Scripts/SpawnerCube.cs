@@ -10,8 +10,7 @@ public class SpawnerCube : MonoBehaviour
     [SerializeField] private List<Cube> _cubes;
     [SerializeField] private int _minQuantityCube;
     [SerializeField] private int _maxQuantityCube;
-
-    public event Action<Transform> SpawnedCubes;
+    [SerializeField] private Explosion _explosion;
 
     public List<Cube> Cubes => new (_cubes.Where(cube => cube != null).ToList());
 
@@ -37,6 +36,6 @@ public class SpawnerCube : MonoBehaviour
             _cubes.Add(newCube);
         }
 
-        SpawnedCubes?.Invoke(transform);
+        _explosion.ExplosionCubes(Cubes, transform);
     }
 }

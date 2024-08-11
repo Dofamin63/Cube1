@@ -13,10 +13,12 @@ public class Cube : MonoBehaviour
     public event Action<Transform> Destroyed;
 
     public float SplitChance { get; private set; } = 1f;
+    public Rigidbody Rigidbody { get; private set; }
 
     private void Awake()
     {
         _renderer = GetComponent<Renderer>();
+        Rigidbody = GetComponent<Rigidbody>();
     }
 
     private void OnMouseUpAsButton()
