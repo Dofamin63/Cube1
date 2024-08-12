@@ -3,10 +3,10 @@ using UnityEngine;
 
 public class Explosion : MonoBehaviour
 { 
-    [SerializeField] private SpawnerCube _spawnerCube;
-    
     private const float ExplosionForce = 50f;
     private const float ExplosionRadius = 80;
+    
+    [SerializeField] private SpawnerCube _spawnerCube;
 
     private void OnEnable()
     {
