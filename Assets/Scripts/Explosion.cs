@@ -6,8 +6,8 @@ public class Explosion : MonoBehaviour
 { 
     [SerializeField] private SpawnerCube _spawnerCube;
     
-    private const float _explosionForce = 50f;
-    private const float _explosionRadius = 80;
+    private const float ExplosionForce = 50f;
+    private const float ExplosionRadius = 80;
 
     private void OnEnable()
     {
@@ -19,7 +19,7 @@ public class Explosion : MonoBehaviour
         _spawnerCube.Cubes.ForEach(cube => cube.Destroyed -= GetExplodableObjects);
     }
 
-    public void ExplosionCubes(List<Cube> cubes, Transform transformTarget, float explosionForce = _explosionForce, float explosionRadius = _explosionRadius)
+    public void ExplosionCubes(List<Cube> cubes, Transform transformTarget, float explosionForce = ExplosionForce, float explosionRadius = ExplosionRadius)
     {
         foreach (Cube cube in cubes)
         {
@@ -30,10 +30,10 @@ public class Explosion : MonoBehaviour
 
     private void GetExplodableObjects(Transform transformTarget)
     {
-        float explosionRadiusByScale = _explosionForce / transformTarget.localScale.x;
-        float explosionForceByScale = _explosionRadius / transformTarget.localScale.x;
+        float explosionForceByScale = ExplosionForce / transformTarget.localScale.x;
+        float explosionRadiusByScale = ExplosionRadius / transformTarget.localScale.x;
         
-        Collider[] hits = Physics.OverlapSphere(transformTarget.position, _explosionRadius);
+        Collider[] hits = Physics.OverlapSphere(transformTarget.position, ExplosionRadius);
         List<Cube> cubes = new();
 
         foreach (Collider hit in hits)
@@ -44,6 +44,6 @@ public class Explosion : MonoBehaviour
             }
         }
         
-        ExplosionCubes(cubes, transformTarget, explosionRadiusByScale, explosionForceByScale);
+        ExplosionCubes(cubes, transformTarget, explosionForceByScale, explosionRadiusByScale);
     }
 }
